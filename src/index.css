@@ -1,0 +1,224 @@
+/* React Fundamentals - shared design system (start.dev dark theme).
+   This file is provided and locked. Students do not edit it; they write React
+   in src/App.jsx. The goal is that a lesson looks like real UI out of the box,
+   matching the start.dev platform so the preview feels native to the app.
+
+   Palette follows the platform's dark theme, tuned a touch lighter than the
+   app chrome so the card separates clearly: #202024 page, #2a2a2f card,
+   #e4e4e4 text, amber (#f1b467) primary buttons, cyan (#88c0d0) links/accents.
+
+   Two ways things get styled:
+   1. Semantic classes the lesson uses by name: card, muted, stack, alert,
+      badge, btn.
+   2. CONTEXTUAL styles: elements are styled by where they sit, so markup the
+      student types inside a .card (a <ul>, an <li>, a nested <div>) looks
+      right with no className needed. Prefer this over asking the student to
+      add a class. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+  font-family: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: #e4e4e4;
+  background: #202024;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f5f5f5;
+  margin: 0 0 0.75rem;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f5f5f5;
+  margin: 0 0 0.25rem;
+}
+
+p {
+  margin: 0 0 0.5rem;
+}
+
+a {
+  color: #88c0d0;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* The main container. A centered elevated panel, so any page reads as a real
+   UI card that sits naturally on the dark platform background. */
+.card {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: #2a2a2f;
+  border: 1px solid rgba(228, 228, 228, 0.08);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.muted {
+  color: rgba(228, 228, 228, 0.6);
+}
+
+/* Even vertical spacing between a container's direct children. */
+.stack > * + * {
+  margin-top: 0.5rem;
+}
+
+/* Contextual styles: anything the student types inside a .card is styled by
+   context, so they write plain markup and it still looks like real UI. */
+
+/* A list inside a card renders as clean rows, no class needed. */
+.card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card li {
+  padding: 0.625rem 0.25rem;
+  border-top: 1px solid rgba(228, 228, 228, 0.08);
+}
+
+.card li:first-child {
+  border-top: none;
+}
+
+/* A nested div inside a card (e.g. a row or sub-item a student builds) gets a
+   slightly elevated surface without a class. Lessons can refine this. */
+.card > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  background: #34343a;
+  border: 1px solid rgba(228, 228, 228, 0.08);
+  border-radius: 0.5rem;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(136, 192, 208, 0.1);
+  border: 1px solid rgba(136, 192, 208, 0.28);
+  color: #cfe8ef;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(241, 180, 103, 0.16);
+  color: #f1b467;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #f1b467;
+  color: #0b0c0f;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #f6c585;
+}
+
+/* Space out a row of adjacent buttons so they do not run together. */
+.btn + .btn {
+  margin-left: 0.625rem;
+}
+
+/* Icon sizing for an inline glyph or svg inside a button. */
+.btn-icon {
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+/* Form controls. Bare elements are styled so a student writes plain inputs and
+   they look right on the dark theme with no className. */
+label {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: rgba(228, 228, 228, 0.8);
+  margin-bottom: 0.25rem;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: #e4e4e4;
+  background: #202024;
+  border: 1px solid rgba(228, 228, 228, 0.14);
+  border-radius: 0.5rem;
+  outline: none;
+}
+
+textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(228, 228, 228, 0.4);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #f1b467;
+  box-shadow: 0 0 0 2px rgba(241, 180, 103, 0.25);
+}
+
+/* Checkboxes and radios should not stretch full width, and pick up the brand
+   accent. A label wrapping a checkbox reads as a normal inline row. */
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  margin-right: 0.4rem;
+  accent-color: #f1b467;
+}
+
+/* Validation message text. */
+.error {
+  color: #e04040;
+  font-size: 0.875rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
