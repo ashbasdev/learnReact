@@ -8,16 +8,20 @@ function App() {
 
   // 1. Write a handleChange that reads name and value off e.target and
   //    updates the matching field with setForm({ ...form, [name]: value }).
+  function handleChange(e) {
+    const {name, value} = e.target;
+    setForm({...form, [name]: value})
+  }
 
   return (
     <div className="card stack">
       <h1>Sign up</h1>
       <label>Name</label>
       {/* 2. Add name="name", value from form.name, and onChange={handleChange}. */}
-      <input placeholder="Your name" />
+      <input placeholder="Your name" name="name" onChange={handleChange} />
       <label>Email</label>
       {/* 2. Add name="email", value from form.email, and onChange={handleChange}. */}
-      <input placeholder="you@example.com" />
+      <input placeholder="you@example.com" name="email" onChange={handleChange} />
       <p className="muted">
         {form.name || "name"} ({form.email || "email"})
       </p>
