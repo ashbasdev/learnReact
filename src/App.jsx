@@ -1,29 +1,31 @@
 import { useState } from "react"
 
-// Keep the whole form in one object and update any field with a single
-// handler, using the input's name attribute and a computed property key.
+// Selects and textareas use value/e.target.value like a text input.
+// A checkbox is the exception: it uses checked/e.target.checked.
 
 function App() {
-  const [form, setForm] = useState({ name: "", email: "" })
-
-  // 1. Write a handleChange that reads name and value off e.target and
-  //    updates the matching field with setForm({ ...form, [name]: value }).
-  function handleChange(e) {
-    const {name, value} = e.target;
-    setForm({...form, [name]: value})
-  }
+  const [size, setSize] = useState("small")
+  const [agree, setAgree] = useState(false)
 
   return (
     <div className="card stack">
-      <h1>Sign up</h1>
-      <label>Name</label>
-      {/* 2. Add name="name", value from form.name, and onChange={handleChange}. */}
-      <input placeholder="Your name" name="name" onChange={handleChange} />
-      <label>Email</label>
-      {/* 2. Add name="email", value from form.email, and onChange={handleChange}. */}
-      <input placeholder="you@example.com" name="email" onChange={handleChange} />
+      <h1>Order</h1>
+      <label>Size</label>
+      {/* 1. Make this select controlled: value from size, update size in
+             onChange from e.target.value. */}
+      <select value={size} onChange={(e)=>setSize(e.target.value)}>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+      <label>
+        {/* 2. Make this checkbox controlled: checked from agree, update agree
+               in onChange from e.target.checked. */}
+        <input type="checkbox" checked={agree} onChange={(e)=>setAgree(e.target.checked)} />
+        I agree to the terms
+      </label>
       <p className="muted">
-        {form.name || "name"} ({form.email || "email"})
+        Size: {size}. Agreed: {agree ? "yes" : "no"}.
       </p>
     </div>
   )
