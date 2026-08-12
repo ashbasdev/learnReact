@@ -1,32 +1,41 @@
 import { useState } from "react"
 
-// Selects and textareas use value/e.target.value like a text input.
-// A checkbox is the exception: it uses checked/e.target.checked.
+// Handle submission on the form with onSubmit. Call e.preventDefault to stop
+// the page reload, use the values from state, then reset the form.
 
 function App() {
-  const [size, setSize] = useState("small")
-  const [agree, setAgree] = useState(false)
+  const [text, setText] = useState("")
+  const [todos, setTodos] = useState(["Buy milk"])
+
+  // 2 + 3. Write handleSubmit: call e.preventDefault(), add text to todos
+  //        (a new array), then reset text to "".
+
+  function handleSubmit(e) {
+    e.preventDefault(); // stop the page reload
+    setTodos([...todos, text]) // add the new todo to the list 
+    setText("")
+  }
+
 
   return (
     <div className="card stack">
-      <h1>Order</h1>
-      <label>Size</label>
-      {/* 1. Make this select controlled: value from size, update size in
-             onChange from e.target.value. */}
-      <select value={size} onChange={(e)=>setSize(e.target.value)}>
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-      </select>
-      <label>
-        {/* 2. Make this checkbox controlled: checked from agree, update agree
-               in onChange from e.target.checked. */}
-        <input type="checkbox" checked={agree} onChange={(e)=>setAgree(e.target.checked)} />
-        I agree to the terms
-      </label>
-      <p className="muted">
-        Size: {size}. Agreed: {agree ? "yes" : "no"}.
-      </p>
+      <h1>To-do</h1>
+      {/* 1. Add onSubmit={handleSubmit} to this form. */}
+      <form className="stack" onSubmit={handleSubmit}>
+        <input
+          placeholder="Add a task"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button className="btn" type="submit">
+          <span className="btn-icon">+</span>Add
+        </button>
+      </form>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo}>{todo}</li>
+        ))}
+      </ul>
     </div>
   )
 }
