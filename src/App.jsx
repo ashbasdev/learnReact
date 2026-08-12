@@ -1,41 +1,35 @@
 import { useState } from "react"
 
-// Handle submission on the form with onSubmit. Call e.preventDefault to stop
-// the page reload, use the values from state, then reset the form.
+// Validation is derived from state: compute whether the value is valid during
+// render, show an error when it is not, and disable submit until it is good.
 
 function App() {
-  const [text, setText] = useState("")
-  const [todos, setTodos] = useState(["Buy milk"])
+  const [email, setEmail] = useState("")
 
-  // 2 + 3. Write handleSubmit: call e.preventDefault(), add text to todos
-  //        (a new array), then reset text to "".
+  // 1. Compute emailError: true when something is typed but it has no "@".
 
   function handleSubmit(e) {
-    e.preventDefault(); // stop the page reload
-    setTodos([...todos, text]) // add the new todo to the list 
-    setText("")
+    e.preventDefault()
+    setEmail("")
   }
-
 
   return (
     <div className="card stack">
-      <h1>To-do</h1>
-      {/* 1. Add onSubmit={handleSubmit} to this form. */}
+      <h1>Sign up</h1>
       <form className="stack" onSubmit={handleSubmit}>
+        <label>Email</label>
         <input
-          placeholder="Add a task"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          name="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
+        {/* 2. When emailError is true, show a <p className="error"> message. */}
+        {/* 3. Disable this button until the email contains "@". */}
         <button className="btn" type="submit">
-          <span className="btn-icon">+</span>Add
+          Sign up
         </button>
       </form>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo}>{todo}</li>
-        ))}
-      </ul>
     </div>
   )
 }
