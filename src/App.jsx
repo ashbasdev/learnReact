@@ -7,6 +7,8 @@ function App() {
   const [email, setEmail] = useState("")
 
   // 1. Compute emailError: true when something is typed but it has no "@".
+  const emailError = email.length > 0 && !email.includes("@")
+  const canSubmit = email.includes("@")
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -25,8 +27,8 @@ function App() {
           onChange={(e) => setEmail(e.target.value)}
         />
         {/* 2. When emailError is true, show a <p className="error"> message. */}
-        {/* 3. Disable this button until the email contains "@". */}
-        <button className="btn" type="submit">
+        {emailError ? <p className="error">Please enter a valid email.</p> : ''}
+        <button className="btn" type="submit" disabled={!canSubmit}>
           Sign up
         </button>
       </form>
