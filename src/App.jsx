@@ -1,37 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-// Validation is derived from state: compute whether the value is valid during
-// render, show an error when it is not, and disable submit until it is good.
+// Add a useEffect that logs name after every render. Open the Console tab
+// next to Tests to watch it fire.
 
 function App() {
-  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
 
-  // 1. Compute emailError: true when something is typed but it has no "@".
-  const emailError = email.length > 0 && !email.includes("@")
-  const canSubmit = email.includes("@")
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    setEmail("")
-  }
+  // Add a useEffect here. Inside it, console.log the current name.
+  useEffect(()=> {
+    console.log(name);
+  })
 
   return (
     <div className="card stack">
-      <h1>Sign up</h1>
-      <form className="stack" onSubmit={handleSubmit}>
-        <label>Email</label>
-        <input
-          name="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {/* 2. When emailError is true, show a <p className="error"> message. */}
-        {emailError ? <p className="error">Please enter a valid email.</p> : ''}
-        <button className="btn" type="submit" disabled={!canSubmit}>
-          Sign up
-        </button>
-      </form>
+      <h1>Name echo</h1>
+      <input
+        placeholder="Type your name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <p>Hello, {name || "stranger"}</p>
     </div>
   )
 }
