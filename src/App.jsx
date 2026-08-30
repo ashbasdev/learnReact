@@ -1,26 +1,28 @@
 import { useState, useEffect } from "react"
 
-// Add a useEffect that logs name after every render. Open the Console tab
-// next to Tests to watch it fire.
-
 function App() {
+  const [count, setCount] = useState(0)
   const [name, setName] = useState("")
 
-  // Add a useEffect here. Inside it, console.log the current name.
-  useEffect(()=> {
-    console.log(name);
-  })
+  // This effect has no dependency array, so it runs after EVERY render,
+  // including each keystroke in the name field. Add a dependency array so it
+  // runs only when count changes. Watch it in the Console tab.
+  useEffect(() => {
+    console.log("count is now", count)
+  }, [count]) // <-- added [count] here
 
   return (
-    <div className="card stack">
-      <h1>Name echo</h1>
-      <input
-        placeholder="Type your name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <p>Hello, {name || "stranger"}</p>
-    </div>
+      <div className="card stack">
+        <h1>Dependencies</h1>
+        <input
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+        />
+        <button className="btn" onClick={() => setCount(count + 1)}>
+          Count: {count}
+        </button>
+      </div>
   )
 }
 
