@@ -1,44 +1,22 @@
 import { useState, useEffect } from "react"
 
-const USER_IDS = [1, 2, 3]
-
 function App() {
-  const [selectedUserId, setSelectedUserId] = useState(1)
-  const [posts, setPosts] = useState([])
+  const [seconds, setSeconds] = useState(0)
 
-  // This effect fetches the posts for selectedUserId, but its dependency array
-  // is empty, so it only runs once and never refetches when you pick another
-  // user. Add selectedUserId to the dependency array.
   useEffect(() => {
-    async function loadPosts() {
-      const res = await fetch(
-          `https://jsonplaceholder.typicode.com/posts?userId=${selectedUserId}`,
-      )
-      const data = await res.json()
-      setPosts(data)
-    }
-    loadPosts()
-  }, [selectedUserId]) // <- add selectedUserId to the dependency array
+    const id = setInterval(() => {
+      setSeconds((s) => s + 1)
+    }, 1000)
+
+    // Return a cleanup function here that calls clearInterval(id), so the timer
+    // stops instead of stacking up another one each time the effect runs.
+    return () => clearInterval(id)
+  }, [])
 
   return (
       <div className="card stack">
-        <h1>Posts by user</h1>
-        <div>
-          {USER_IDS.map((id) => (
-              <button
-                  key={id}
-                  className="btn"
-                  onClick={() => setSelectedUserId(id)}
-              >
-                User {id}
-              </button>
-          ))}
-        </div>
-        <ul>
-          {posts.map((post) => (
-              <li key={post.id}>{post.title}</li>
-          ))}
-        </ul>
+        <h1>Timer</h1>
+        <p>Seconds on screen: {seconds}</p>
       </div>
   )
 }
