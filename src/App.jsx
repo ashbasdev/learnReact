@@ -1,27 +1,31 @@
 import { useState, useEffect } from "react"
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [name, setName] = useState("")
+  const [users, setUsers] = useState([])
 
-  // This effect has no dependency array, so it runs after EVERY render,
-  // including each keystroke in the name field. Add a dependency array so it
-  // runs only when count changes. Watch it in the Console tab.
-  useEffect(() => {
-    console.log("count is now", count)
-  }, [count]) // <-- added [count] here
+  // Fetch the users once, when the component mounts:
+  // 1. Add a useEffect with an empty dependency array [].
+  // 2. Inside, define an async function that fetches
+  //    https://jsonplaceholder.typicode.com/users, parses the JSON, and stores
+  //    it with setUsers.
+  // 3. Call that function.
+  useEffect(()=> {
+    async function loadUsers() {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      const data = await res.json()
+      setUsers(data)
+    }
+    loadUsers();
+  }, [])
 
   return (
       <div className="card stack">
-        <h1>Dependencies</h1>
-        <input
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-        />
-        <button className="btn" onClick={() => setCount(count + 1)}>
-          Count: {count}
-        </button>
+        <h1>Users</h1>
+        <ul>
+          {users.map((user) => (
+              <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
       </div>
   )
 }
