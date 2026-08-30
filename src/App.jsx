@@ -2,25 +2,38 @@ import { useState, useEffect } from "react"
 
 function App() {
   const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  // Fetch the users once, when the component mounts:
-  // 1. Add a useEffect with an empty dependency array [].
-  // 2. Inside, define an async function that fetches
-  //    https://jsonplaceholder.typicode.com/users, parses the JSON, and stores
-  //    it with setUsers.
-  // 3. Call that function.
-  useEffect(()=> {
+  // The fetch and the loading/error flags are already wired up for you.
+  useEffect(() => {
     async function loadUsers() {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const data = await res.json()
-      setUsers(data)
+      try {
+        // Small artificial delay so the "Loading..." state is visible on every run.
+        await new Promise((resolve) => setTimeout(resolve, 800))
+        const res = await fetch("https://jsonplaceholder.typicode.com/users")
+        if (!res.ok) throw new Error("Request failed")
+        const data = await res.json()
+        setUsers(data)
+      } catch (err) {
+        setError("Could not load users.")
+      } finally {
+        setLoading(false)
+      }
     }
-    loadUsers();
+    loadUsers()
   }, [])
 
   return (
       <div className="card stack">
         <h1>Users</h1>
+        {/* 1. While loading is true, show <p className="muted">Loading...</p> */}
+        {loading && <p className="muted">Loading...</p>}
+        {/* 2. If error is set, show <p className="error">{error}</p> */}
+        {error && <p className="error">{error}</p>}
+        {/* 3. If not loading and no error and users is empty, show
+             <p className="muted">No users found.</p> */}
+        {!loading && !error && users.length === 0 && <p className="muted">No users found.</p> }
         <ul>
           {users.map((user) => (
               <li key={user.id}>{user.name}</li>
