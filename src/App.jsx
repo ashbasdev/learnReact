@@ -1,42 +1,42 @@
 import { useState, useEffect } from "react"
 
-function App() {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+const USER_IDS = [1, 2, 3]
 
-  // The fetch and the loading/error flags are already wired up for you.
+function App() {
+  const [selectedUserId, setSelectedUserId] = useState(1)
+  const [posts, setPosts] = useState([])
+
+  // This effect fetches the posts for selectedUserId, but its dependency array
+  // is empty, so it only runs once and never refetches when you pick another
+  // user. Add selectedUserId to the dependency array.
   useEffect(() => {
-    async function loadUsers() {
-      try {
-        // Small artificial delay so the "Loading..." state is visible on every run.
-        await new Promise((resolve) => setTimeout(resolve, 800))
-        const res = await fetch("https://jsonplaceholder.typicode.com/users")
-        if (!res.ok) throw new Error("Request failed")
-        const data = await res.json()
-        setUsers(data)
-      } catch (err) {
-        setError("Could not load users.")
-      } finally {
-        setLoading(false)
-      }
+    async function loadPosts() {
+      const res = await fetch(
+          `https://jsonplaceholder.typicode.com/posts?userId=${selectedUserId}`,
+      )
+      const data = await res.json()
+      setPosts(data)
     }
-    loadUsers()
-  }, [])
+    loadPosts()
+  }, [selectedUserId]) // <- add selectedUserId to the dependency array
 
   return (
       <div className="card stack">
-        <h1>Users</h1>
-        {/* 1. While loading is true, show <p className="muted">Loading...</p> */}
-        {loading && <p className="muted">Loading...</p>}
-        {/* 2. If error is set, show <p className="error">{error}</p> */}
-        {error && <p className="error">{error}</p>}
-        {/* 3. If not loading and no error and users is empty, show
-             <p className="muted">No users found.</p> */}
-        {!loading && !error && users.length === 0 && <p className="muted">No users found.</p> }
+        <h1>Posts by user</h1>
+        <div>
+          {USER_IDS.map((id) => (
+              <button
+                  key={id}
+                  className="btn"
+                  onClick={() => setSelectedUserId(id)}
+              >
+                User {id}
+              </button>
+          ))}
+        </div>
         <ul>
-          {users.map((user) => (
-              <li key={user.id}>{user.name}</li>
+          {posts.map((post) => (
+              <li key={post.id}>{post.title}</li>
           ))}
         </ul>
       </div>
