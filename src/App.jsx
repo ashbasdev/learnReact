@@ -1,42 +1,30 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
+
+// TODO: make this a real custom hook.
+// 1. Hold the boolean in state, starting at initialValue (useState).
+// 2. Add a toggle function that flips it.
+// 3. Return them as a pair: [value, toggle].
+function useToggle(initialValue = false) {
+  const [on, setOn] = useState(initialValue);
+
+  function toggle () {
+    setOn((current) => !current)
+  }
+  return [on, toggle]
+}
 
 function App() {
-  const [seconds, setSeconds] = useState(0)
-
-  // A ref holds a value that survives renders without causing one. We use it to
-  // remember the interval id, so Stop can clear the timer Start created.
-  const intervalRef = useRef(null)
-
-  function start() {
-    // Ignore extra clicks while a timer is already running.
-    if (intervalRef.current !== null) return
-    // TODO 1: start an interval that bumps seconds every 1000ms, and save the
-    // id it returns in intervalRef.current.
-    intervalRef.current = setInterval(() => {
-      setSeconds((s) => s + 1)
-    }, 1000)
-
-  }
-
-  function stop() {
-    // TODO 2: stop the timer by clearing the interval id saved in the ref.
-    clearInterval(intervalRef.current)
-
-    intervalRef.current = null
-  }
+  // The component already uses the hook. Once useToggle manages real state,
+  // this button starts working.
+  const [isOpen, toggle] = useToggle(false)
 
   return (
       <div className="card stack">
-        <h1>Stopwatch</h1>
-        <p>Seconds: {seconds}</p>
-        <div>
-          <button className="btn" onClick={start}>
-            Start
-          </button>
-          <button className="btn" onClick={stop}>
-            Stop
-          </button>
-        </div>
+        <h1>Details</h1>
+        <button className="btn" onClick={toggle}>
+          {isOpen ? "Hide" : "Show"} details
+        </button>
+        {isOpen && <p className="muted">Here are the details you asked for.</p>}
       </div>
   )
 }
