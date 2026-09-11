@@ -1,44 +1,58 @@
-import { createContext, useContext } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
-// createContext makes a shared value that any component below the provider can
-// read directly with useContext, with no props threaded through the middle.
-const UserContext = createContext(null) // 1. Create the context
+// The context carries an object: the current theme plus a function to change
+// it. Any component below the provider can read the value AND update it.
+const ThemeContext = createContext(null)
 
-function UserBadge() {
-  // TODO 2: read the user from UserContext with useContext instead of this
-  // placeholder, so the badge shows the real name.
-  const user = useContext(UserContext) // 3. Consume it here
-  return <span className="badge">{user ? user.name : "Guest"}</span>
+function ThemeLabel() {
+  const { theme } = useContext(ThemeContext)
+  return <p className="muted">Current theme: {theme}</p>
 }
 
-function Header() {
-  // No user prop here anymore. Context skips the middle.
+function ThemeToggle() {
+  // TODO 1: also pull `toggleTheme` out of the context, alongside `theme`.
+  const { theme, toggleTheme } = useContext(ThemeContext)
+  // TODO 2: call toggleTheme from the button's onClick below, so this deep
+  // component updates the shared theme.
   return (
-      <div>
-        <span>Menu</span>
-        <UserBadge />
-      </div>
+      <button className="btn" onClick={toggleTheme}>
+        Switch to {theme === "light" ? "dark" : "light"}
+      </button>
   )
 }
 
-function Layout() {
+function Toolbar() {
+  // Toolbar passes nothing down. Each child reads the context for itself.
   return (
-      <div className="card stack">
-        <h1>Dashboard</h1>
-        <Header />
+      <div className="stack">
+        <ThemeLabel />
+        <ThemeToggle />
       </div>
   )
 }
 
 function App() {
-  const user = { name: "Sam Rivera", role: "Admin" }
-  // TODO 1: wrap <Layout /> in <UserContext.Provider value={user}> so every
-  // component below can read the user. With no provider, useContext only sees
-  // the default (null), so the badge stays "Guest".
-  // 1. Provide a value
-  return <UserContext.Provider value={user}>
-    <Layout />
-  </UserContext.Provider>
+  const [theme, setTheme] = useState("dark")
+
+  function toggleTheme() {
+    setTheme((current) => (current === "light" ? "dark" : "light"))
+  }
+
+  useEffect(() => {
+    document.body.classList.remove("light", "dark")
+    document.body.classList.add(theme)
+  }, [theme])
+
+  // The `theme` class on the card swaps the look. Because the state lives here,
+  // updating it from deep in the tree re-renders App and re-themes the card.
+  return (
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <div className={`card stack ${theme}`}>
+          <h1>Settings</h1>
+          <Toolbar />
+        </div>
+      </ThemeContext.Provider>
+  )
 }
 
 export default App
