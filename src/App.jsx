@@ -1,31 +1,29 @@
-import { useState } from "react"
+import { useFetch } from "./useFetch.js"
 
-// TODO: make this a real custom hook.
-// 1. Hold the boolean in state, starting at initialValue (useState).
-// 2. Add a toggle function that flips it.
-// 3. Return them as a pair: [value, toggle].
-function useToggle(initialValue = false) {
-  const [on, setOn] = useState(initialValue);
+function Users() {
+  const {
+    data: users = [],
+    loading,
+    error,
+  } = useFetch("https://jsonplaceholder.typicode.com/users")
 
-  function toggle () {
-    setOn((current) => !current)
-  }
-  return [on, toggle]
+  if (loading) return <p className="muted">Loading...</p>
+  if (error) return <p className="error">{error}</p>
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  )
 }
 
 function App() {
-  // The component already uses the hook. Once useToggle manages real state,
-  // this button starts working.
-  const [isOpen, toggle] = useToggle(false)
-
   return (
-      <div className="card stack">
-        <h1>Details</h1>
-        <button className="btn" onClick={toggle}>
-          {isOpen ? "Hide" : "Show"} details
-        </button>
-        {isOpen && <p className="muted">Here are the details you asked for.</p>}
-      </div>
+    <div className="card stack">
+      <h1>Users</h1>
+      <Users />
+    </div>
   )
 }
 
