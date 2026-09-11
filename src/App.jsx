@@ -1,23 +1,42 @@
-import { useRef } from "react"
+import { useState, useRef } from "react"
 
 function App() {
-  // useRef gives us a stable box: { current }. React will set `current` to the
-  // real DOM node once we attach this ref to an element.
-  const inputRef = useRef(null)
+  const [seconds, setSeconds] = useState(0)
 
-  function focusInput() {
-    // TODO 2: focus the input by calling .focus() on the ref's current node.
-    inputRef.current.focus()
+  // A ref holds a value that survives renders without causing one. We use it to
+  // remember the interval id, so Stop can clear the timer Start created.
+  const intervalRef = useRef(null)
+
+  function start() {
+    // Ignore extra clicks while a timer is already running.
+    if (intervalRef.current !== null) return
+    // TODO 1: start an interval that bumps seconds every 1000ms, and save the
+    // id it returns in intervalRef.current.
+    intervalRef.current = setInterval(() => {
+      setSeconds((s) => s + 1)
+    }, 1000)
+
+  }
+
+  function stop() {
+    // TODO 2: stop the timer by clearing the interval id saved in the ref.
+    clearInterval(intervalRef.current)
+
+    intervalRef.current = null
   }
 
   return (
       <div className="card stack">
-        <h1>Quick note</h1>
-        {/* TODO 1: attach inputRef to this input with the ref attribute. */}
-        <input placeholder="Write something..." ref={inputRef} />
-        <button className="btn" onClick={focusInput}>
-          Focus the field
-        </button>
+        <h1>Stopwatch</h1>
+        <p>Seconds: {seconds}</p>
+        <div>
+          <button className="btn" onClick={start}>
+            Start
+          </button>
+          <button className="btn" onClick={stop}>
+            Stop
+          </button>
+        </div>
       </div>
   )
 }
