@@ -244,3 +244,15 @@ input[type="radio"] {
   background: #ffffff;
   border-color: rgba(0, 0, 0, 0.1);
 }
+
+/* Active nav link (NavLink lesson). NavLink adds the `active` class to the
+   link for the page currently showing, so the current page stands out. */
+nav a.active {
+  color: #f1b467;
+  font-weight: 700;
+}
+
+/* Space the nav bar off the page content below it. */
+nav.card {
+  margin-bottom: 1rem;
+}
