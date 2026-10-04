@@ -5,6 +5,12 @@ export default {
   esbuild: {
     jsx: "automatic",
   },
+  // react-router-dom ships a CJS/ESM dist that the in-browser preview serves
+  // raw unless we tell Vite to pre-bundle it. Without this the preview throws
+  // at runtime. esbuild does the pre-bundle once on boot.
+  optimizeDeps: {
+    include: ["react-router-dom"],
+  },
   server: {
     host: true,
     allowedHosts: true,
