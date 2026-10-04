@@ -1,24 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-// TODO: also import NavLink from "react-router-dom".
-import {NavLink} from "react-router-dom";
-import Home from "./Home.jsx"
 import Products from "./Products.jsx"
-import Contact from "./Contact.jsx"
+import ProductDetail from "./ProductDetail.jsx"
 
 function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <nav className="card">
-        {/* TODO: add a NavLink for each page: / (Home), /products (Products),
-            and /contact (Contact). */}
-        <NavLink to="/">Home </NavLink>
-        <NavLink to="/products">Products </NavLink>
-        <NavLink to="/contact">Contact </NavLink>
-      </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+        {/* TODO: add a dynamic route. The path "/products/:id" should render
+            <ProductDetail />. The :id part is a placeholder that matches any
+            value, like /products/keyboard or /products/mouse. */}
       </Routes>
     </BrowserRouter>
   )
