@@ -3,6 +3,9 @@ import PokemonCard from "./PokemonCard.jsx"
 
 function Home() {
   const [pokemon, setPokemon] = useState([])
+  // TODO: add a `query` state for the search text, starting as ""
+
+  const [query, setQuery] = useState("")
 
   useEffect(() => {
     async function loadPokemon() {
@@ -14,12 +17,23 @@ function Home() {
     loadPokemon()
   }, [])
 
-  // Each Pokemon is now rendered by the PokemonCard component, passed down as a
-  // prop. Your job this lesson is to build that component (PokemonCard.jsx).
+  // TODO: build `filtered` from `pokemon`: keep only the ones whose name
+  // includes the lowercased query. For now it just shows everything.
+  const filtered = pokemon.filter((p) =>
+      p.name.includes(query.toLowerCase())
+  )
+
   return (
     <div className="page">
+      <div className="search">
+        <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search Pokemon..."
+        />
+      </div>
       <div className="pokedex-grid">
-        {pokemon.map((p) => (
+        {filtered.map((p) => (
           <PokemonCard pokemon={p} key={p.name} />
         ))}
       </div>
