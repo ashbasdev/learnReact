@@ -1,19 +1,9 @@
-/* React Fundamentals - shared design system (start.dev dark theme).
-   This file is provided and locked. Students do not edit it; they write React
-   in src/App.jsx. The goal is that a lesson looks like real UI out of the box,
-   matching the start.dev platform so the preview feels native to the app.
-
-   Palette follows the platform's dark theme, tuned a touch lighter than the
-   app chrome so the card separates clearly: #202024 page, #2a2a2f card,
-   #e4e4e4 text, amber (#f1b467) primary buttons, cyan (#88c0d0) links/accents.
-
-   Two ways things get styled:
-   1. Semantic classes the lesson uses by name: card, muted, stack, alert,
-      badge, btn.
-   2. CONTEXTUAL styles: elements are styled by where they sit, so markup the
-      student types inside a .card (a <ul>, an <li>, a nested <div>) looks
-      right with no className needed. Prefer this over asking the student to
-      add a class. */
+/* Pokedex capstone - its own look, NOT the course's dark design system.
+   A light, friendly "Pokemon app" theme: soft gray canvas, white rounded
+   cards, the iconic Pokedex-red header, canonical type colors, energetic stat
+   bars. This file is provided and locked; students write the React. The same
+   file ships in every lesson of this chapter. Pure CSS only (no web fonts or
+   remote images) so it renders in the preview with no cross-origin requests. */
 
 *,
 *::before,
@@ -24,25 +14,26 @@
 body {
   margin: 0;
   min-height: 100vh;
-  padding: 2.5rem 1.5rem;
-  font-family: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+  padding: 2rem 1.25rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
-  color: #e4e4e4;
-  background: #202024;
+  color: #2b2f38;
+  background: #eef0f4;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1 {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #f5f5f5;
+  font-weight: 800;
+  color: #1d2129;
   margin: 0 0 0.75rem;
 }
 
 h2 {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #f5f5f5;
+  color: #1d2129;
   margin: 0 0 0.25rem;
 }
 
@@ -51,32 +42,17 @@ p {
 }
 
 a {
-  color: #88c0d0;
+  color: #dc0a2d;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 a:hover {
   text-decoration: underline;
 }
 
-/* The main container. A centered elevated panel, so any page reads as a real
-   UI card that sits naturally on the dark platform background. */
-.card {
-  width: 100%;
-  max-width: 28rem;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background: #2a2a2f;
-  border: 1px solid rgba(228, 228, 228, 0.08);
-  border-radius: 0.75rem;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.25);
-}
-
 .muted {
-  color: rgba(228, 228, 228, 0.6);
+  color: #8a92a3;
 }
 
 /* Even vertical spacing between a container's direct children. */
@@ -84,175 +60,300 @@ a:hover {
   margin-top: 0.5rem;
 }
 
-/* Contextual styles: anything the student types inside a .card is styled by
-   context, so they write plain markup and it still looks like real UI. */
+/* A plain white panel, used for state messages and small bits of UI. */
+.card {
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(20, 24, 33, 0.06), 0 8px 24px rgba(20, 24, 33, 0.08);
+}
 
-/* A list inside a card renders as clean rows, no class needed. */
-.card ul {
+/* Error message banner. */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #fdecec;
+  border: 1px solid #f5b5b5;
+  color: #b3261e;
+}
+
+/* Primary button (e.g. a retry control). */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: #dc0a2d;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #b80823;
+}
+
+/* The search input. A clean white pill with a red focus ring. */
+input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font: inherit;
+  color: #2b2f38;
+  background: #ffffff;
+  border: 1px solid #dfe3ea;
+  border-radius: 9999px;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(20, 24, 33, 0.05);
+}
+
+input::placeholder {
+  color: #aab2c0;
+}
+
+input:focus {
+  border-color: #dc0a2d;
+  box-shadow: 0 0 0 3px rgba(220, 10, 45, 0.18);
+}
+
+/* ============================================================
+   Pokedex layout
+   ============================================================ */
+
+/* The page container, wider than a card so the grid has room. */
+.page {
+  width: 100%;
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+/* The signature Pokedex-red header bar with a CSS pokeball mark. */
+.app-header {
+  max-width: 54rem;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1.4rem;
+  background: #dc0a2d;
+  border-radius: 1rem;
+  box-shadow: 0 6px 18px rgba(220, 10, 45, 0.28);
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.4rem;
+  letter-spacing: 0.01em;
+}
+
+/* A small pokeball drawn in pure CSS: white ring, band, and center button. */
+.app-header::before {
+  content: "";
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: radial-gradient(
+      circle at 50% 50%,
+      #ffffff 0 0.18rem,
+      transparent 0.18rem 100%
+    ),
+    linear-gradient(#ffffff 0 0) 50% 50% / 100% 2px no-repeat;
+}
+
+/* Search box above the grid. */
+.search {
+  max-width: 22rem;
+  margin-bottom: 1.25rem;
+}
+
+/* The grid of Pokemon. */
+.pokedex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 1rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.card li {
-  padding: 0.625rem 0.25rem;
-  border-top: 1px solid rgba(228, 228, 228, 0.08);
-}
-
-.card li:first-child {
-  border-top: none;
-}
-
-/* A nested div inside a card (e.g. a row or sub-item a student builds) gets a
-   slightly elevated surface without a class. Lessons can refine this. */
-.card > div {
+/* A single Pokemon card. It is a <Link>, so it renders as an <a>. */
+.pokemon-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.625rem 0.75rem;
-  background: #34343a;
-  border: 1px solid rgba(228, 228, 228, 0.08);
-  border-radius: 0.5rem;
+  gap: 0.3rem;
+  padding: 1rem 0.75rem 1.1rem;
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 1rem;
+  color: #2b2f38;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(20, 24, 33, 0.05);
+  transition:
+    transform 0.13s ease,
+    box-shadow 0.13s ease;
 }
 
-.alert {
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  background: rgba(136, 192, 208, 0.1);
-  border: 1px solid rgba(136, 192, 208, 0.28);
-  color: #cfe8ef;
+.pokemon-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(20, 24, 33, 0.14);
+  text-decoration: none;
 }
 
-.badge {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
+/* The sprite sits on a soft circular disc, the way Pokedex apps frame them. */
+.pokemon-card img {
+  width: 6rem;
+  height: 6rem;
+  image-rendering: pixelated;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #f5f6f9 0%, #e9ecf2 100%);
+}
+
+.pokemon-number {
+  color: #9aa2b1;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.pokemon-name {
+  font-weight: 700;
+  font-size: 1.0625rem;
+  text-transform: capitalize;
+}
+
+/* Detail view: large artwork, types, stats. */
+.detail {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.75rem;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgba(20, 24, 33, 0.06), 0 12px 30px rgba(20, 24, 33, 0.1);
+  text-align: center;
+}
+
+.detail img {
+  width: 13rem;
+  height: 13rem;
+  filter: drop-shadow(0 8px 14px rgba(20, 24, 33, 0.18));
+}
+
+.detail h1 {
+  text-transform: capitalize;
+  font-size: 1.75rem;
+  margin-bottom: 0.15rem;
+}
+
+/* A row of type pills. */
+.types {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.85rem 0 1.4rem;
+}
+
+.type {
+  padding: 0.28rem 0.85rem;
   border-radius: 9999px;
-  background: rgba(241, 180, 103, 0.16);
-  color: #f1b467;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  color: #ffffff;
+  background: #8a92a3;
+  box-shadow: 0 2px 6px rgba(20, 24, 33, 0.12);
+}
+
+/* Canonical type colors. Markup adds `type-<name>` alongside `type`. */
+.type-normal { background: #9099a1; }
+.type-fire { background: #ff9d55; }
+.type-water { background: #5090d6; }
+.type-electric { background: #f4d23c; color: #4a4633; }
+.type-grass { background: #63bc5a; }
+.type-ice { background: #73cec0; }
+.type-fighting { background: #ce4069; }
+.type-poison { background: #ab6ac8; }
+.type-ground { background: #d97746; }
+.type-flying { background: #8fa9de; }
+.type-psychic { background: #fa7179; }
+.type-bug { background: #91c12f; }
+.type-rock { background: #c5b78c; }
+.type-ghost { background: #5269ad; }
+.type-dragon { background: #0b6dc3; }
+.type-dark { background: #5a5465; }
+.type-steel { background: #5a8ea2; }
+.type-fairy { background: #ec8fe6; }
+
+/* Stats as labeled bars. */
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  text-align: left;
+  margin-top: 0.5rem;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: 6rem 2.5rem 1fr;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.stat-label {
+  text-transform: capitalize;
   font-size: 0.8125rem;
   font-weight: 600;
+  color: #8a92a3;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  background: #f1b467;
-  color: #0b0c0f;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: #f6c585;
-}
-
-/* Space out a row of adjacent buttons so they do not run together. */
-.btn + .btn {
-  margin-left: 0.625rem;
-}
-
-/* Icon sizing for an inline glyph or svg inside a button. */
-.btn-icon {
-  font-size: 0.9em;
-  line-height: 1;
-}
-
-/* Form controls. Bare elements are styled so a student writes plain inputs and
-   they look right on the dark theme with no className. */
-label {
-  display: block;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: rgba(228, 228, 228, 0.8);
-  margin-bottom: 0.25rem;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  font: inherit;
-  color: #e4e4e4;
-  background: #202024;
-  border: 1px solid rgba(228, 228, 228, 0.14);
-  border-radius: 0.5rem;
-  outline: none;
-}
-
-textarea {
-  min-height: 4.5rem;
-  resize: vertical;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgba(228, 228, 228, 0.4);
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #f1b467;
-  box-shadow: 0 0 0 2px rgba(241, 180, 103, 0.25);
-}
-
-/* Checkboxes and radios should not stretch full width, and pick up the brand
-   accent. A label wrapping a checkbox reads as a normal inline row. */
-input[type="checkbox"],
-input[type="radio"] {
-  width: auto;
-  margin-right: 0.4rem;
-  accent-color: #f1b467;
-}
-
-/* Validation message text. */
-.error {
-  color: #e04040;
-  font-size: 0.875rem;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Light theme variant (updating-context lesson). The card is dark by default;
-   adding the `light` class flips it, so toggling the shared theme visibly
-   re-themes the whole card. */
-.card.light {
-  background: #f4f4f5;
-  color: #1a1a1a;
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-.card.light h1 {
-  color: #111111;
-}
-
-.card.light .muted {
-  color: rgba(0, 0, 0, 0.55);
-}
-
-.card.light > div {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Active nav link (NavLink lesson). NavLink adds the `active` class to the
-   link for the page currently showing, so the current page stands out. */
-nav a.active {
-  color: #f1b467;
+.stat-value {
+  font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
 
-/* Space the nav bar off the page content below it. */
-nav.card {
+.stat-bar {
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: #edeff3;
+  overflow: hidden;
+}
+
+.stat-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #f6c453, #e3350d);
+}
+
+/* Centered loading / empty state message. */
+.notice {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #8a92a3;
+  font-weight: 500;
+}
+
+/* Back link above the detail card. */
+.back-link {
+  display: inline-block;
   margin-bottom: 1rem;
+  color: #8a92a3;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  color: #dc0a2d;
+  text-decoration: none;
 }
